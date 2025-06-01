@@ -6,5 +6,6 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-    return NextResponse.json(await createRecipe());
+    const body = await request.json();
+    return NextResponse.json(await createRecipe(body.name));
 }

@@ -5,38 +5,24 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { useCreateRecipe } from '@/lib/hooks/recipes';
 
-interface CreateRecipeFormProps {
-  onCreated: () => Promise<any>;
-}
 
-export function CreateRecipeForm({ onCreated }: CreateRecipeFormProps) {
-  const [title, setTitle] = useState('');
+export function CreateRecipeForm() {
+  const [name, setName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { mutate } = useCreateRecipe();
 
   const handleCreate = async () => {
-    if (!title.trim()) {
-      alert('Please enter a title.');
+    if (!name.trim()) {
+      alert('Please enter a name.');
       return;
     }
 
     setIsSubmitting(true);
     try {
-      const res = await fetch('/api/recipes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: title.trim() }),
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        throw new Error(
-          errorData.error || `Failed to create recipe: ${res.statusText}`
-        );
-      }
-
-      await onCreated();
-      setTitle('');
+      await mutate(name);
+      setName('');
     } catch (err: any) {
       console.error(err);
       alert(err.message || 'An unexpected error occurred.');
@@ -52,14 +38,14 @@ export function CreateRecipeForm({ onCreated }: CreateRecipeFormProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
-          <Label htmlFor="title" className="mb-1">
-            Title
+          <Label htmlFor="name" className="mb-1">
+            Name
           </Label>
           <Input
-            id="title"
+            id="name"
             type="text"
-            value={title}
-            onChange={(e: any) => setTitle(e.target.value)}
+            value={name}
+            onChange={(e: any) => setName(e.target.value)}
             placeholder="e.g. Grandma’s Pancakes"
           />
         </div>
