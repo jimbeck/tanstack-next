@@ -6,7 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { useCreateRecipe } from '@/lib/hooks/recipes';
-
+import { toast } from 'sonner';
 
 export function CreateRecipeForm() {
   const [name, setName] = useState('');
@@ -25,7 +25,7 @@ export function CreateRecipeForm() {
       setName('');
     } catch (err: any) {
       console.error(err);
-      alert(err.message || 'An unexpected error occurred.');
+      toast(err.message || 'An unexpected error occurred.');
     } finally {
       setIsSubmitting(false);
     }

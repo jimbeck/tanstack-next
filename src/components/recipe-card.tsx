@@ -3,6 +3,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useDeleteRecipe } from '@/lib/hooks/recipes';
+import { toast } from 'sonner';
 
 type RecipeCardProps = {
   id: string;
@@ -16,7 +17,7 @@ export function RecipeCard({ id, name }: RecipeCardProps) {
       await mutate(id);
     } catch (e: any) {
       console.error(e);
-      alert(e.message || 'An unexpected error occurred while deleting.');
+      toast(e.message || 'An unexpected error occurred while deleting.');
     }
   };
 
