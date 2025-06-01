@@ -3,9 +3,9 @@ import { NextResponse } from 'next/server';
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params;
-  await deleteRecipe(id);
+  const params = await props.params;
+  await deleteRecipe(params.id);
   return NextResponse.json({});
 }
