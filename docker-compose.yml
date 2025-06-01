@@ -1,0 +1,13 @@
+services:
+  postgres:
+    image: postgres:15.8 # pinned to supabase postgres version
+    restart: always
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - '5435:5432'
+volumes:
+  postgres:
