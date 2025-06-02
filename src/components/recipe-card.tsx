@@ -2,26 +2,22 @@
 
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { useDeleteRecipe } from '@/lib/hooks/recipes';
+import { toast } from 'sonner';
 
 type RecipeCardProps = {
   id: string;
   name: string;
-  onDeleted: () => Promise<any>;
 };
 
-export function RecipeCard({ id, name, onDeleted }: RecipeCardProps) {
+export function RecipeCard({ id, name }: RecipeCardProps) {
+  const { mutate } = useDeleteRecipe();
   const handleDelete = async () => {
     try {
-      const res = await fetch(`/api/recipes/${id}`, { method: 'DELETE' });
-      if (!res.ok) {
-        const err = (await res.json().catch(() => ({}))).error ||
-          `Failed to delete recipe: ${res.statusText}`;
-        throw new Error(err);
-      }
-      await onDeleted();
+      await mutate(id);
     } catch (e: any) {
       console.error(e);
-      alert(e.message || 'An unexpected error occurred while deleting.');
+      toast(e.message || 'An unexpected error occurred while deleting.');
     }
   };
 
